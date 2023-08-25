@@ -28,7 +28,7 @@ const callMainMenu = async () => {
         {
             type: 'list',
             name: 'mainMenu',
-            message: 'Which license will cover your project?',
+            message: 'What would you like to do?',
             choices: [
                 'View All Departments',
                 'View All Roles',
@@ -36,7 +36,8 @@ const callMainMenu = async () => {
                 'Add A Department',
                 'Add a Role',
                 'Add an Employee',
-                'Update an Employee Role'
+                'Update an Employee Role',
+                'Quit'
             ],
         },
     ])
@@ -46,7 +47,7 @@ const callMainMenu = async () => {
             getDepartments();
             break;
         case 'View All Roles':
-            
+            getRoles();
             break;
         case 'View All Employees':
             
@@ -63,6 +64,8 @@ const callMainMenu = async () => {
         case 'Update an Employee Role':
             
             break;
+        case 'Quit':
+            process.exit();
     }
 }
 
@@ -83,13 +86,14 @@ callMainMenu();
 
 
 const getDepartments = async () => {
-    const sql = `SELECT name as Departments FROM department`;
+    const sql = `SELECT id as ID, name as Name FROM department`;
     db.query(sql, (err, rows) => {
         if (err) {
         err.status(500).json({ error: err.message });
             return;
         } else {
             console.log(``);
+            console.log(`Departments`);
             console.table(rows);
             callMainMenu();
         }
@@ -102,6 +106,29 @@ const getDepartments = async () => {
 //role id
 //the department that role belongs to
 //the salary for that role
+
+const getRoles = async () => {
+    const sql = `SELECT role.id as ID, 
+    title as Title, 
+    department.name as Department, 
+    salary as Salary 
+    FROM role
+    INNER JOIN department
+    on role.department_id = department.id;`;
+    db.query(sql, (err, rows) => {
+        if (err) {
+        err.status(500).json({ error: err.message });
+            return;
+        } else {
+            console.log(``);
+            console.log(`Roles`);
+            console.table(rows);
+            callMainMenu();
+        }
+    });
+}
+
+
 
 //view all employee --- formatted table with employee data
 //employee ids
