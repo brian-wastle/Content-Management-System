@@ -50,7 +50,7 @@ const callMainMenu = async () => {
             getRoles();
             break;
         case 'View All Employees':
-            
+            getEmployees();
             break;
         case 'Add A Department':
             
@@ -138,6 +138,33 @@ const getRoles = async () => {
 //departments
 //salaries
 //and managers that the employees report to
+
+const getEmployees = async () => {
+    const sql = `SELECT E1.id as ID,
+    E1.first_name as First_Name, 
+    E1.last_name as Last_Name, 
+    role.title AS Title,
+    department.name AS Department,
+    role.salary AS Salary,
+    CONCAT(E2.first_name , " ", E2.last_name) AS ManagerName
+    FROM employee E1
+    LEFT JOIN employee E2 ON E1.manager_id = E2.id
+    INNER JOIN role
+    on E1.role_id = role.id
+    INNER JOIN department
+    on role.department_id = department.id;`;
+    db.query(sql, (err, rows) => {
+        if (err) {
+        err.status(500).json({ error: err.message });
+            return;
+        } else {
+            console.log(``);
+            console.log(`Employees`);
+            console.table(rows);
+            callMainMenu();
+        }
+    });
+}
 
 //add a department ---
 //prompted to enter the name of the department
