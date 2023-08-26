@@ -4,17 +4,7 @@ import mysql from 'mysql2';
 
 import { getEmployees } from './getEmployees.mjs';
 
-const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      // MySQL username,
-      user: 'root',
-      // TODO: Add MySQL password here
-      password: '',
-      database: 'organization_db'
-    },
-    console.log(`Connected to the organization_db database.`)
-  );
+import { db } from './dbConnect.mjs';
 
 //add an employee ---
 //prompted to enter the employee’s first name, last name, role, and manager

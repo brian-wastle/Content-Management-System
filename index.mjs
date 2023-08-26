@@ -2,28 +2,14 @@
 
 import inquirer from 'inquirer';
 
-import mysql from 'mysql2';
+import { getDepartments } from './functions/getDepartments.mjs'
+import { getRoles } from './functions/getRoles.mjs'
+import { getEmployees } from './functions/getEmployees.mjs'
+import { addDepartment } from './functions/addDepartment.mjs'
+import { addRole } from './functions/addRole.mjs';
+import { addEmployee } from './functions/addEmployee.mjs';
+import { updateEmployee } from './functions/updateEmployee.mjs'
 
-import { getDepartments } from './assets/getDepartments.mjs'
-import { getRoles } from './assets/getRoles.mjs'
-import { getEmployees } from './assets/getEmployees.mjs'
-import { addDepartment } from './assets/addDepartment.mjs'
-import { addRole } from './assets/addRole.mjs';
-import { addEmployee } from './assets/addEmployee.mjs';
-import { updateEmployee } from './assets/updateEmployee.mjs'
-
-
-const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      // MySQL username,
-      user: 'root',
-      // TODO: Add MySQL password here
-      password: '',
-      database: 'organization_db'
-    },
-    console.log(`Connected to the organization_db database.`)
-  );
 
 //set up inquirer
 
