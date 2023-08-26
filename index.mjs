@@ -59,10 +59,10 @@ const callMainMenu = async () => {
             addRole();
             break;
         case 'Add an Employee':
-            
+            addEmployee();
             break;
         case 'Update an Employee Role':
-            
+            updateEmployee();
             break;
         case 'Quit':
             process.exit();
@@ -90,7 +90,7 @@ const getDepartments = async () => {
     const sql = `SELECT id as ID, name as Name FROM department`;
     db.query(sql, (err, rows) => {
         if (err) {
-        err.status(500).json({ error: err.message });
+        err.log(err);
             return;
         } else {
             console.log(``);
@@ -117,7 +117,7 @@ const getRoles = async () => {
     on role.department_id = department.id;`;
     db.query(sql, (err, rows) => {
         if (err) {
-        err.status(500).json({ error: err.message });
+        err.log(err);
             return;
         } else {
             console.log(``);
@@ -153,7 +153,7 @@ const getEmployees = async () => {
     on role.department_id = department.id;`;
     db.query(sql, (err, rows) => {
         if (err) {
-        err.status(500).json({ error: err.message });
+        err.log(err);
             return;
         } else {
             console.log(``);
@@ -185,15 +185,12 @@ const addDepartment = async () => {
     const params = answers.departmentName;
     db.query(sql, params, (err, rows) => {
         if (err) {
-            err.status(500).json({ error: err.message });
+            err.log(err);
                 return;
         } else {
-            console.log(``);
-            console.log(`Departments`);
-            console.table(rows);
             getDepartments();
         }
-      });
+    });
 
 }
 
@@ -204,9 +201,8 @@ const addDepartment = async () => {
 const addRole = async () => {
 
     const departmentChoices = async () => {
-        const departmentQuery = `SELECT department.id AS value, department.name FROM department;`;
+        const departmentQuery = `SELECT department.name, department.id AS value FROM department;`;
         const departments = await db.promise().query(departmentQuery);
-        console.log(departments);
         return departments[0];
     };
 
@@ -228,40 +224,156 @@ const addRole = async () => {
             message: "To which department does this role belong?",
             choices: await departmentChoices(),
             when(answers) {
-                    console.log(answers);
                     return(answers);
                 },
         }
     ]);
-
-    console.log([answers.roleName, answers.salaryLevel, answers.departmentName]);
-
-
-
 
     const sql = `INSERT INTO role (title, salary, department_id)
     VALUES (?,?,?)`;
     const params = [answers.roleName, answers.salaryLevel, answers.departmentName];
     db.promise().query(sql, params, (err, rows) => {
         if (err) {
-            err.json({ error: err.message });
+            err.log(err);
                 return;
         } else {
-            console.log(``);
-            console.log(`Roles`);
-            console.table(rows);
-            getRoles();
-            callMainMenu();
+            return;
         }
-      });
-    
-
+    });
+    getRoles();
 }
 
 //add an employee ---
 //prompted to enter the employee’s first name, last name, role, and manager
 //that employee is added to the database
 
+const addEmployee = async () => {
+
+    const roleChoices = async () => {
+        const roleQuery = `SELECT 
+CONCAT(role.title , " -- ", department.name) as name, 
+role.id AS value FROM role
+INNER JOIN department ON role.department_id = department.id;`;
+        const roles = await db.promise().query(roleQuery);
+        return roles[0];
+    };
+
+    const managerChoices = async () => {
+        const managerQuery = `SELECT 
+CONCAT(employee.first_name , " ", employee.last_name, " -- ", department.name) as name, 
+employee.id AS value 
+FROM employee 
+INNER JOIN role ON employee.role_id = role.id
+INNER JOIN department ON role.department_id = department.id
+WHERE employee.manager_id is NULL;`;
+        const managers = await db.promise().query(managerQuery);
+        return managers[0];
+    };
+
+    let answers = await inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'employeeFirstName',
+            message: `What is the employee's first name?`
+        },
+        {
+            type: 'input',
+            name: 'employeeLastName',
+            message: `What is the employee's last name?`
+        },
+        {
+            type: 'list',
+            name: 'departmentName',
+            message: `What is the employee's role?`,
+            choices: await roleChoices()
+        },
+        {
+            type: 'list',
+            name: 'managerName',
+            message: `Who is the employee's manager?`,
+            choices: await managerChoices(),
+            when(answers) {
+                    return(answers);
+                },
+        }
+    ]);
+
+    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+    VALUES (?,?,?,?)`;
+    const params = [answers.employeeFirstName, answers.employeeLastName, answers.departmentName, answers.managerName];
+    db.promise().query(sql, params, (err, rows) => {
+        if (err) {
+            err.log(err);
+                return;
+        } else {
+            return;
+        }
+    });
+    getEmployees();
+}
+
 //update an employee role ---
 //prompted to select an employee to update and their new role
 //this information is updated in the database 
+
+const updateEmployee = async () => {
+
+    const employeeChoices = async () => {
+        const employeeQuery = `SELECT 
+    CONCAT(role.title , " -- ", department.name) as name, 
+    role.id AS value FROM role
+    INNER JOIN department ON role.department_id = department.id;`;
+        const employees = await db.promise().query(employeeQuery);
+        return employees[0];
+    };
+    
+    const roleChoices = async () => {
+        const roleQuery = `SELECT 
+    CONCAT(role.title , " -- ", department.name) as name, 
+    role.id AS value FROM role
+    INNER JOIN department ON role.department_id = department.id;`;
+        const roles = await db.promise().query(roleQuery);
+        return roles[0];
+    };
+
+    let answers = await inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'employeeName',
+                message: `Which employeew would you like to change?`,
+                choices: await employeeChoices(),
+            },
+            {
+                type: 'list',
+                name: 'roleName',
+                message: `What is the employee's role?`,
+                choices: await roleChoices(),
+                when(answers) {
+                        return(answers);
+                    },
+            }
+        ]);
+
+
+    const sql = `UPDATE reviews SET review = ? WHERE id = ?`;
+    const params = [req.body.review, req.params.id];
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+        res.status(400).json({ error: err.message });
+        } else if (!result.affectedRows) {
+        res.json({
+            message: 'Movie not found'
+        });
+        } else {
+        res.json({
+            message: 'success',
+            data: req.body,
+            changes: result.affectedRows
+        });
+        }
+    });
+    getEmployees();
+}
