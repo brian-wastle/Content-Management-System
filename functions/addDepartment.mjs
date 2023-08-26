@@ -1,7 +1,5 @@
 import inquirer from 'inquirer';
 
-import mysql from 'mysql2';
-
 import { getDepartments } from './getDepartments.mjs';
 
 import { db } from './dbConnect.mjs';

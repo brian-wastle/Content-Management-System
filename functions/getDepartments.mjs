@@ -1,8 +1,4 @@
-import inquirer from 'inquirer';
-
 import cTable from 'console.table';
-
-import mysql from 'mysql2';
 
 import {callMainMenu} from '../index.mjs'
 

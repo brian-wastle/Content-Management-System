@@ -1,7 +1,5 @@
 import inquirer from 'inquirer';
 
-import mysql from 'mysql2';
-
 import { getEmployees } from './getEmployees.mjs';
 
 import { db } from './dbConnect.mjs';
