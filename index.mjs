@@ -204,7 +204,7 @@ const addDepartment = async () => {
 const addRole = async () => {
 
     const departmentChoices = async () => {
-        const departmentQuery = `SELECT department.id, department.name FROM department;`;
+        const departmentQuery = `SELECT department.id AS value, department.name FROM department;`;
         const departments = await db.promise().query(departmentQuery);
         console.log(departments);
         return departments[0];
@@ -218,39 +218,43 @@ const addRole = async () => {
             message: 'What is the name of the role?'
         },
         {
-            type: 'list',
-            name: 'departmentName',
-            message: "To which department does this role belong?",
-            choices: await departmentChoices(),
-        },
-        {
             type: 'input',
             name: 'salaryLevel',
             message: 'What is the starting salary?'
         },
+        {
+            type: 'list',
+            name: 'departmentName',
+            message: "To which department does this role belong?",
+            choices: await departmentChoices(),
+            when(answers) {
+                    console.log(answers);
+                    return(answers);
+                },
+        }
     ]);
 
     console.log([answers.roleName, answers.salaryLevel, answers.departmentName]);
-createRole();
-    // when(answers) {
-    //     createRole();
-    //     return answers;
-    // },
 
 
-    function createRole() {
-        const sql = `INSERT INTO role (title, salary, department_id)
+
+
+    const sql = `INSERT INTO role (title, salary, department_id)
     VALUES (?,?,?)`;
     const params = [answers.roleName, answers.salaryLevel, answers.departmentName];
-    db.query(sql, params, (rows) => {
-        
+    db.promise().query(sql, params, (err, rows) => {
+        if (err) {
+            err.json({ error: err.message });
+                return;
+        } else {
             console.log(``);
-            console.log(`Departments`);
+            console.log(`Roles`);
             console.table(rows);
-            // getRoles();
-        
+            getRoles();
+            callMainMenu();
+        }
       });
-    }
+    
 
 }
 
