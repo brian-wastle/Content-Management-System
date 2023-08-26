@@ -39,7 +39,7 @@ const callMainMenu = async () => {
                 'Update an Employee Role',
                 'Quit'
             ],
-        },
+        }
     ])
 
     switch (answers.mainMenu) {
@@ -53,10 +53,10 @@ const callMainMenu = async () => {
             getEmployees();
             break;
         case 'Add A Department':
-            
+            addDepartment();
             break;
         case 'Add a Role':
-            
+            addRole();
             break;
         case 'Add an Employee':
             
@@ -69,6 +69,7 @@ const callMainMenu = async () => {
     }
 }
 
+//initiate main menu
 callMainMenu();
 
 //view all departments
@@ -100,7 +101,6 @@ const getDepartments = async () => {
     });
 }
 
-
 //view all roles ---
 //the job title
 //role id
@@ -128,9 +128,7 @@ const getRoles = async () => {
     });
 }
 
-
-
-//view all employee --- formatted table with employee data
+//view all employees --- 
 //employee ids
 //first names
 //last names
@@ -170,9 +168,91 @@ const getEmployees = async () => {
 //prompted to enter the name of the department
 //that department is added to the database
 
+const addDepartment = async () => {
+
+    let answers = await inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'departmentName',
+            message: 'What is the name of the department?'
+        }
+    ]);
+
+    // answers.departmentName
+    const sql = `INSERT INTO department (name)
+    VALUES (?)`;
+    const params = answers.departmentName;
+    db.query(sql, params, (err, rows) => {
+        if (err) {
+            err.status(500).json({ error: err.message });
+                return;
+        } else {
+            console.log(``);
+            console.log(`Departments`);
+            console.table(rows);
+            getDepartments();
+        }
+      });
+
+}
+
 //add a role ---
 //prompted to enter the name, salary, and department for the role
 //that role is added to the database
+
+const addRole = async () => {
+
+    const departmentChoices = async () => {
+        const departmentQuery = `SELECT department.id, department.name FROM department;`;
+        const departments = await db.promise().query(departmentQuery);
+        console.log(departments);
+        return departments[0];
+    };
+
+    let answers = await inquirer
+    .prompt([
+        {
+            type: 'input',
+            name: 'roleName',
+            message: 'What is the name of the role?'
+        },
+        {
+            type: 'list',
+            name: 'departmentName',
+            message: "To which department does this role belong?",
+            choices: await departmentChoices(),
+        },
+        {
+            type: 'input',
+            name: 'salaryLevel',
+            message: 'What is the starting salary?'
+        },
+    ]);
+
+    console.log([answers.roleName, answers.salaryLevel, answers.departmentName]);
+createRole();
+    // when(answers) {
+    //     createRole();
+    //     return answers;
+    // },
+
+
+    function createRole() {
+        const sql = `INSERT INTO role (title, salary, department_id)
+    VALUES (?,?,?)`;
+    const params = [answers.roleName, answers.salaryLevel, answers.departmentName];
+    db.query(sql, params, (rows) => {
+        
+            console.log(``);
+            console.log(`Departments`);
+            console.table(rows);
+            // getRoles();
+        
+      });
+    }
+
+}
 
 //add an employee ---
 //prompted to enter the employee’s first name, last name, role, and manager
