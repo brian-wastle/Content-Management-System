@@ -4,9 +4,10 @@ import {callMainMenu} from '../index.mjs'
 
 import { db } from './dbConnect.mjs';
 
-  //view all departments --- formatted table
-//department names 
-//department ids
+//view budgets of each dept
+//list department IDs
+//list department names
+//list sum of each dept budget
 
 
 export const getBudgets = async () => {

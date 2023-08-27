@@ -10,6 +10,7 @@ import { addRole } from './functions/addRole.mjs';
 import { addEmployee } from './functions/addEmployee.mjs';
 import { updateEmployee } from './functions/updateEmployee.mjs'
 import { getBudgets } from './functions/getBudgets.mjs'
+import { getDirectReports } from './functions/getDirectReports.mjs'
 
 
 //set up inquirer
@@ -26,6 +27,7 @@ export const callMainMenu = async () => {
                 'View All Departments',
                 'View All Roles',
                 'View All Employees',
+                'View All Direct Reports',
                 'View All Budgets',
                 'Add A Department',
                 'Add a Role',
@@ -45,6 +47,9 @@ export const callMainMenu = async () => {
             break;
         case 'View All Employees':
             getEmployees();
+            break;
+        case 'View All Direct Reports':
+            getDirectReports();
             break;
         case 'View All Budgets':
             getBudgets();
