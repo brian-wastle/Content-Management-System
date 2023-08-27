@@ -11,13 +11,15 @@ import { db } from './dbConnect.mjs';
 //the salary for that role
 
 export const getRoles = async () => {
-    const sql = `SELECT role.id as ID, 
-    title as Title, 
-    department.name as Department, 
-    salary as Salary 
-    FROM role
-    INNER JOIN department
-    on role.department_id = department.id;`;
+    const sql = `SELECT 
+    role.id AS ID,
+    title AS Title,
+    department.name AS Department,
+    salary AS Salary
+FROM
+    role
+        INNER JOIN
+    department ON role.department_id = department.id;`;
     db.query(sql, (err, rows) => {
         if (err) {
         err.log(err);

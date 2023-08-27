@@ -26,10 +26,10 @@ export const addDepartment = async () => {
     db.query(sql, params, (err, rows) => {
         if (err) {
             err.log(err);
-                return;
+            return;
         } else {
-            getDepartments();
+            return;
         }
     });
-
+    getDepartments();
 }
