@@ -26,7 +26,7 @@ FROM
             return;
         } else {
             console.log(``);
-            console.log(`Roles`);
+            console.log(`----Roles----`);
             console.table(rows);
             callMainMenu();
         }

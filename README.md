@@ -17,7 +17,7 @@ Follow the prompts on the screen to view and alter your database. 'Quit' will en
 
 All of the 'View' options will list the entries in the database. The 'Add' options will add the type of data you choose and then display the updated table. 'Update' functions behave this same way. 
 
-https://github.com/brian-wastle/Content-Management-System
+https://drive.google.com/file/d/1iPoI_38rQZZNNHbRYkYSK9eVxxMnO46w/view
 
 ![picture of program running in command line](./assets/images/screenshot.PNG)
 

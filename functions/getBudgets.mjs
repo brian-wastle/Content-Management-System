@@ -28,7 +28,7 @@ GROUP BY role.department_id;`;
             return;
         } else {
             console.log(``);
-            console.log(`Budget by Department`);
+            console.log(`----Budget by Department----`);
             console.table(rows);
             callMainMenu();
         }

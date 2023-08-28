@@ -12,11 +12,14 @@ import { updateEmployee } from './functions/updateEmployee.mjs'
 import { getBudgets } from './functions/getBudgets.mjs'
 import { getDirectReports } from './functions/getDirectReports.mjs'
 
+console.log('');
+console.log('EMPLOYEE MANAGEMENT SYSTEM');
+console.log('');
 
 //set up inquirer
 
 export const callMainMenu = async () => {
-
+    console.log('----Main Menu----');
     let answers = await inquirer
     .prompt([
         {

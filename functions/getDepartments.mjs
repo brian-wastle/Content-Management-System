@@ -17,7 +17,7 @@ export const getDepartments = async () => {
             return;
         } else {
             console.log(``);
-            console.log(`Departments`);
+            console.log(`----Departments----`);
             console.table(rows);
             callMainMenu();
         }

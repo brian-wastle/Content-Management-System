@@ -36,7 +36,7 @@ FROM
             return;
         } else {
             console.log(``);
-            console.log(`Employees`);
+            console.log(`----Employees----`);
             console.table(rows);
             callMainMenu();
         }
