@@ -19,7 +19,6 @@ export const addDepartment = async () => {
         }
     ]);
 
-    // answers.departmentName
     const sql = `INSERT INTO department (name)
     VALUES (?)`;
     const params = answers.departmentName;

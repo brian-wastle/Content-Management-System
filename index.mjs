@@ -11,6 +11,7 @@ import { addEmployee } from './functions/addEmployee.mjs';
 import { updateEmployee } from './functions/updateEmployee.mjs'
 import { getBudgets } from './functions/getBudgets.mjs'
 import { getDirectReports } from './functions/getDirectReports.mjs'
+import { deleteDepartment } from './functions/deleteDepartment.mjs'
 
 
 //set up inquirer
@@ -33,6 +34,7 @@ export const callMainMenu = async () => {
                 'Add a Role',
                 'Add an Employee',
                 'Update an Employee Role',
+                'Delete Department',
                 'Quit'
             ],
         }
@@ -65,6 +67,9 @@ export const callMainMenu = async () => {
             break;
         case 'Update an Employee Role':
             updateEmployee();
+            break;
+        case 'Delete Department':
+            deleteDepartment();
             break;
         case 'Quit':
             process.exit();
