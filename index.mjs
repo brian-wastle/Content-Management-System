@@ -34,7 +34,6 @@ export const callMainMenu = async () => {
                 'Add a Role',
                 'Add an Employee',
                 'Update an Employee Role',
-                'Delete Department',
                 'Quit'
             ],
         }
@@ -67,9 +66,6 @@ export const callMainMenu = async () => {
             break;
         case 'Update an Employee Role':
             updateEmployee();
-            break;
-        case 'Delete Department':
-            deleteDepartment();
             break;
         case 'Quit':
             process.exit();
